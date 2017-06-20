@@ -1,0 +1,32 @@
+{
+  "name": "pals-around",
+  "version": "1.0.0",
+  "description": "A social networking service.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fumblehool/pals-around.git"
+  },
+  "keywords": [
+    "RESTful",
+    "API",
+    "Social"
+  ],
+  "author": "Damanpreet Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fumblehool/pals-around/issues"
+  },
+  "homepage": "https://github.com/fumblehool/pals-around#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.10.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
