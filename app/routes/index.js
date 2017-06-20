@@ -1,34 +1,24 @@
 
-module.exports = function(app, db){
-    app.post('/api/users/', (req, res) => {
-    console.log(req.body)
-    res.send('Hello')
-    });
+module.exports = function(app) {
+    var Controllers = require('../controllers');
+
+    //Routes
+    app.route('/api/users/')
+        .post(Controllers.create_a_user);
     
-    app.get('/api/users/:uid', (req, res) => {
-        var id = req.params.id;
-        res.send("hello from /test" + uid);
-    });
+    app.route('/api/users/:uid')
+        .get(Controllers.get_a_user);
 
-    app.get('/api/posts/:id', (req, res) => {
-        var id = req.params.id;
-        res.send("id is" + id);
-    });
+    app.route('/api/posts/:id')
+        .get(Controllers.get_a_post);
+    
+    app.route('/api/posts')
+        .post(Controllers.create_a_post);
 
-    app.post('/api/posts', (req, res) => {
-        console.log("posts POST data");
-        res.send("Post a status");
-    });
+    app.route('/api/timeline')
+        .get(Controllers.get_timeline);
 
-    app.get('/api/timeline', (req, res) => {
-        res.send("timeline data");
-    });
-
-    app.get('/api/follow/:uid', (req, res) => {
-        res.send("follow user:" + req.params.uid);
-    });
-
-    app.get('/api/unfollow/:uid', (req, res) => {
-        res.send("unfollow user:" + req.params.uid);
-    });
-}
+    app.route('/api/follow/:uid')
+        .get(Controllers.follow_a_user)
+        .delete(Controllers.unfollow_a_user)
+};
