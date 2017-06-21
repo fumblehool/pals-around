@@ -1,10 +1,10 @@
 
 var mongoose = require('mongoose'),
 Model = mongoose.model('db');
+Post = mongoose.model('post')
+// Model.collection.dropIndexes();
 
-Model.collection.dropIndexes();
-
-exports.get_a_user = function(req,res){
+exports.get_user = function(req,res){
     Model.findById(req.params.uid, function(err, user) {
     if (err)
       res.send(err);
@@ -12,7 +12,7 @@ exports.get_a_user = function(req,res){
   }); 
 };
 
-exports.create_a_user = function(req,res){
+exports.create_user = function(req,res){
     var new_user = new Model(req.body);
     new_user.save(function(err, user){
         if (err){
@@ -22,21 +22,45 @@ exports.create_a_user = function(req,res){
     })
 };
 
-exports.get_a_post = function(req,res){
-    res.send("get post");
+exports.get_post = function(req,res){
+    var id = req.params.id;
+    Model.findOne({'posts._id': id}, function(err, data){
+        if (err) return err;
+        res.send(data);
+    })
 };
-exports.create_a_post = function(req,res){
-    res.send("create post")
+exports.create_post = function(req,res){
+    var uid = req.body;
+    Model.findByIdAndUpdate(uid, {$push:{"posts":req.body}},
+        {safe: true, upsert: true},
+        function(err, model){
+            res.json(req.body);
+        });
 };
 
 exports.get_timeline = function(req,res){
-    res.send("get_timeline");
+    Model.find({'name': 'Daman'},function(err, user){
+        res.json(user);
+    });
 };
 
-exports.follow_a_user = function(req,res){
-    res.send("follow a user");
+exports.follow_user = function(req,res){
+    var uid = req.params.uid;
+    Model.findByIdAndUpdate('594958845d260e7c7d08fbf5', {$push: {'follows': uid}},
+        {safe: true, upsert: true},
+        function(err, model){
+            res.send(req.user);
+        });   
 };
 
-exports.unfollow_a_user = function(req,res){
+exports.unfollow_user = function(req,res){
     res.send("unfollow a user");    
+};
+
+exports.login_user = function(req, res){
+    res.send("login user");
+};
+
+exports.home = function(req, res){
+    res.send("home");
 };

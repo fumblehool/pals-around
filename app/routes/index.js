@@ -4,21 +4,28 @@ module.exports = function(app) {
 
     //Routes
     app.route('/api/users/')
-        .post(Controllers.create_a_user);
+        .post(Controllers.create_user);
     
     app.route('/api/users/:uid')
-        .get(Controllers.get_a_user);
+        .get(Controllers.get_user);
 
     app.route('/api/posts/:id')
-        .get(Controllers.get_a_post);
+        .get(Controllers.get_post);
     
     app.route('/api/posts')
-        .post(Controllers.create_a_post);
+        .post(Controllers.create_post);
 
     app.route('/api/timeline')
         .get(Controllers.get_timeline);
 
     app.route('/api/follow/:uid')
-        .get(Controllers.follow_a_user)
-        .delete(Controllers.unfollow_a_user)
+        .post(Controllers.follow_user)
+        .delete(Controllers.unfollow_user)
+
+    app.route('/')
+        .get(Controllers.home);
+
+    app.route('/login/')
+        .get(Controllers.login_user);
+
 };

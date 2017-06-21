@@ -1,6 +1,18 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
+var Posts = new Schema({
+    text:{
+        type: String,
+        length: 140
+    },
+    date:{
+        type: Date,
+        default: Date.now
+    }
+});
+
 var PalsAroundSchema = new Schema({
     name:{
         type: String
@@ -8,7 +20,7 @@ var PalsAroundSchema = new Schema({
     username:{
         type: String,
         Required: true,
-        index: { unique: true }
+        index: { unique: true },
     },
     password:{
         type: String,
@@ -16,20 +28,13 @@ var PalsAroundSchema = new Schema({
     },
     email:{
         type: String,
-        Required: true
+        Required: true,
+        index: { unique: true }
     },
-    follows:[
-        {
-            username: String
-        }
-    ],
-    posts: [
-        {
-            text: String,
-            date: Date 
-        }
-    ],
+    follows:[],
+    posts: [Posts],
 });
 
 
 module.exports = mongoose.model('db', PalsAroundSchema);
+module.exports = mongoose.model('post', Posts);
