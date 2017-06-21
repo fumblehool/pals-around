@@ -49,15 +49,17 @@ exports.get_post = function(req,res){
     var id = req.params.id;
     Model.find({'posts':{'_id': id}}, function(err, data){
         if (err) return err;
+        console.log(data);
         res.send(data);
     })
 };
 exports.create_post = function(req,res){
     var uid = req.body;
-    Model.findByIdAndUpdate(uid, {$push:{"posts":req.body}},
+    Model.findByIdAndUpdate(req.session.uid, {$push:{"posts":req.body}},
         {safe: true, upsert: true},
         function(err, model){
-            res.json(req.body);
+            console.log(model);
+            res.render("timeline", {user: req.session.uid});
         });
 };
 
@@ -127,5 +129,5 @@ exports.get_signup_page = function(req, res){
 };
 
 exports.get_timeline = function(req, res){
-    res.render('timeline.ejs', {});
+    res.render('timeline.ejs', {user: ''});
 };
