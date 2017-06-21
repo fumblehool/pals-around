@@ -3,10 +3,15 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var db = require('./app/config/db');
 var schema = require('./app/models');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(cookieParser());
+app.use(session({secret: "qweazxc1123a@$cas@#F(734C"}));
 
 var port = process.env.PORT || 3000
 

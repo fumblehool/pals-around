@@ -13,13 +13,33 @@ exports.get_user = function(req,res){
 };
 
 exports.create_user = function(req,res){
-    var new_user = new Model(req.body);
-    new_user.save(function(err, user){
-        if (err){
-            res.send(err);
-        }
-        res.json(user);
-    })
+    if(!req.body.name ||
+       !req.body.username || 
+       !req.body.password ||
+       !req.body.email){
+        res.status("400");
+        res.send("Invalid details!");
+    }
+    else{
+        var test = {'username': req.body.username,
+                    'email': req.body.password};
+        Model.find(test, function(err, user){
+            if (err) res.send(err);
+            else if (user != null){
+                console.log("user exists");
+                res.send(user);
+            }
+            else{
+                var new_user = new Model(req.body);
+                new_user.save(function(err, user){
+                    if (err){
+                        res.send(err);
+                    }
+                    res.json(user);
+                })
+            }
+        })
+    }   
 };
 
 exports.get_post = function(req,res){
@@ -58,9 +78,40 @@ exports.unfollow_user = function(req,res){
 };
 
 exports.login_user = function(req, res){
-    res.send("login user");
+    if(!req.body.username || !req.body.password){
+        res.status("400");
+        res.send("Invalid details!");
+    }
+    else{
+        var test = {
+            'username': req.body.username,
+            'password': req.body.password
+        }
+
+        Model.find(test, function(err, user){
+            if(err) res.send(err);
+            if(user){
+                var id = user[0]['_id'];
+                req.session.uid = id;
+                res.send(req.session.uid);
+            }
+            else{
+                res.status("400");
+                res.send("user not found.");
+            }
+
+        });
+    }
+};
+
+exports.logout_user = function(req, res){
+    req.session.destroy(function(){
+      console.log("user logged out.")
+   });
+   res.redirect('/');
 };
 
 exports.home = function(req, res){
     res.send("home");
 };
+

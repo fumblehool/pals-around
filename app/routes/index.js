@@ -26,6 +26,9 @@ module.exports = function(app) {
         .get(Controllers.home);
 
     app.route('/login/')
-        .get(Controllers.login_user);
+        .post(Controllers.login_user);
+
+    app.route('/logout/')
+        .get(Controllers.logout_user);
 
 };

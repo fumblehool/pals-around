@@ -23,7 +23,9 @@
   "homepage": "https://github.com/fumblehool/pals-around#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "mongoose": "^4.10.7"
   },
   "devDependencies": {
