@@ -44,7 +44,7 @@ exports.create_user = function(req,res){
 
 exports.get_post = function(req,res){
     var id = req.params.id;
-    Model.findOne({'posts._id': id}, function(err, data){
+    Model.find({'posts':{'_id': id}}, function(err, data){
         if (err) return err;
         res.send(data);
     })
@@ -112,6 +112,6 @@ exports.logout_user = function(req, res){
 };
 
 exports.home = function(req, res){
-    res.send("home");
+    res.render('index.html', {});
 };
 

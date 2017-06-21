@@ -1,3 +1,4 @@
+var path = require('path');
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -9,6 +10,10 @@ var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.set('views', __dirname + '/app/static/templates');
+app.engine('html', require('ejs').renderFile);
+app.use(express.static('app/static/js/'));
 
 app.use(cookieParser());
 app.use(session({secret: "qweazxc1123a@$cas@#F(734C"}));
