@@ -20,15 +20,21 @@ module.exports = function(app) {
 
     app.route('/api/follow/:uid')
         .post(Controllers.follow_user)
-        .delete(Controllers.unfollow_user)
+        .delete(Controllers.unfollow_user);
 
     app.route('/')
         .get(Controllers.home);
 
     app.route('/login/')
-        .post(Controllers.login_user);
+        .post(Controllers.login_user)
+        .get(Controllers.get_login_page);
 
     app.route('/logout/')
         .get(Controllers.logout_user);
 
+    app.route('/signup/')
+        .get(Controllers.get_signuppage);
+
+    app.route('/timeline/')
+        .get(Controllers.get_timeline);
 };

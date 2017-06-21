@@ -115,3 +115,14 @@ exports.home = function(req, res){
     res.render('home.ejs', {user: ''});
 };
 
+exports.get_login_page = function(req, res){
+    res.render('login.ejs', {});
+};
+
+exports.get_signup_page = function(req, res){
+    res.render('signup.ejs', {});
+};
+
+exports.get_timeline = function(req, res){
+    res.render('timeline.ejs', {});
+};
