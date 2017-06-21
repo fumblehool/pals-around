@@ -112,6 +112,6 @@ exports.logout_user = function(req, res){
 };
 
 exports.home = function(req, res){
-    res.render('index.html', {});
+    res.render('home.ejs', {user: ''});
 };
 

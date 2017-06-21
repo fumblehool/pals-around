@@ -1,0 +1,16 @@
+<!-- views/partials/navbar.ejs -->
+<div class="header clearfix">
+    <nav>
+        <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/">Home</a></li>
+            <% if (user){ %>
+            <li role="presentation"><a href="/logout">Logout</a></li>
+            <% } else{ %>  
+            <li role="presentation"><a href="/login">Login</a></li>
+            <li role="presentation"><a href="/signup">SignUp</a></li>
+            
+            <% } %>
+        </ul>
+        <h3 class="text-muted"><a href="#" style="text-decoration:none">Pals Around</a></h3>
+    </nav>
+</div>

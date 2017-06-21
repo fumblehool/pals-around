@@ -11,8 +11,8 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.set('views', __dirname + '/app/static/templates');
-app.engine('html', require('ejs').renderFile);
+app.set('views', __dirname + '/app/views');
+app.set('view engine', 'ejs');
 app.use(express.static('app/static/js/'));
 
 app.use(cookieParser());
