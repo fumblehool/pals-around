@@ -41,4 +41,7 @@ module.exports = function(app) {
     app.route('/signup/')
         .get(Controllers.get_signup_page);
 
+    app.route('/user/:uid')
+        .get(Controllers.user_profile)
+
 };

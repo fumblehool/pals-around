@@ -2,7 +2,7 @@
 var mongoose = require('mongoose'),
 Model = mongoose.model('db');
 Post = mongoose.model('post')
-// Model.collection.dropIndexes();
+
 
 exports.get_user = function(req,res){
     Model.findById(req.params.uid, function(err, user) {
@@ -98,7 +98,7 @@ exports.login_user = function(req, res){
             if(user){
                 var id = user[0]['_id'];
                 req.session.uid = id;
-                res.render('home.ejs', {user: id});
+                res.render('timeline.ejs', {user: id});
             }
             else{
                 res.status("400");
@@ -129,5 +129,12 @@ exports.get_signup_page = function(req, res){
 };
 
 exports.get_timeline = function(req, res){
+    if(!req.session.uid){
+        res.redirect("/");
+    }
     res.render('timeline.ejs', {user: ''});
+};
+
+exports.user_profile = function(req, res){
+    res.render("profile.ejs", {user: req.session.uid});
 };
