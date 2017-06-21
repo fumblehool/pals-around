@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var db = require('./app/config/db');
 var schema = require('./app/models');
 var cookieParser = require('cookie-parser');
+const formidable = require('express-formidable');
 var session = require('express-session');
 var app = express();
 
@@ -18,6 +19,7 @@ app.use(express.static('app/static/js/'));
 app.use(cookieParser());
 app.use(session({secret: "qweazxc1123a@$cas@#F(734C"}));
 
+// app.use(formidable());
 var port = process.env.PORT || 3000
 
 mongoose.Promise = global.Promise;

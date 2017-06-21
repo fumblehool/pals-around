@@ -25,16 +25,20 @@ module.exports = function(app) {
     app.route('/')
         .get(Controllers.home);
 
+    app.route('/api/login/')
+        .post(Controllers.login_user);
+
     app.route('/login/')
-        .post(Controllers.login_user)
         .get(Controllers.get_login_page);
 
     app.route('/logout/')
         .get(Controllers.logout_user);
 
-    app.route('/signup/')
-        .get(Controllers.get_signuppage);
 
     app.route('/timeline/')
         .get(Controllers.get_timeline);
+
+    app.route('/signup/')
+        .get(Controllers.get_signup_page);
+
 };

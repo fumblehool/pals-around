@@ -25,18 +25,21 @@ exports.create_user = function(req,res){
                     'email': req.body.password};
         Model.find(test, function(err, user){
             if (err) res.send(err);
-            else if (user != null){
-                console.log("user exists");
-                res.send(user);
-            }
-            else{
+            
+            if(!user.length){
                 var new_user = new Model(req.body);
                 new_user.save(function(err, user){
                     if (err){
                         res.send(err);
                     }
-                    res.json(user);
+                    var id = user['_id']
+                    console.log(id);
+                    res.render('home.ejs', {user: id});
                 })
+            }
+            else {
+                console.log("user exists");
+                res.send(user);
             }
         })
     }   
@@ -80,7 +83,7 @@ exports.unfollow_user = function(req,res){
 exports.login_user = function(req, res){
     if(!req.body.username || !req.body.password){
         res.status("400");
-        res.send("Invalid details!");
+        res.render("login.ejs", {error:"Invalid details!"});
     }
     else{
         var test = {
@@ -93,7 +96,7 @@ exports.login_user = function(req, res){
             if(user){
                 var id = user[0]['_id'];
                 req.session.uid = id;
-                res.send(req.session.uid);
+                res.render('home.ejs', {user: id});
             }
             else{
                 res.status("400");
@@ -116,11 +119,11 @@ exports.home = function(req, res){
 };
 
 exports.get_login_page = function(req, res){
-    res.render('login.ejs', {});
+    res.render('login.ejs', { user: null,error: null,});
 };
 
 exports.get_signup_page = function(req, res){
-    res.render('signup.ejs', {});
+    res.render('signup.ejs', {user: ''});
 };
 
 exports.get_timeline = function(req, res){
