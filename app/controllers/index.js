@@ -47,8 +47,7 @@ exports.create_user = function(req,res){
                     console.log(id);
                     req.session.uid = id;
                     req.session.username = user['username']
-                    res.render('timeline.ejs', {user: id,
-                                                username: req.session.username});
+                    res.redirect('/timeline.ejs');
                 })
             }
             
@@ -107,7 +106,7 @@ exports.follow_user = function(req,res){
             {safe: true, upsert: true},
             function(err, model){
                 console.log(model);
-                res.redirect("/timeline");
+                res.redirect("/pals");
             });
     }
     else{
@@ -186,8 +185,18 @@ exports.get_timeline = function(req, res){
     if(!req.session.uid){
         res.redirect("/");
     }
-    res.render('timeline.ejs', {user: req.session.uid,
-                                username: req.session.username});
+    else{
+        Model.find({'_id': req.session.uid}, function(err, data){
+        if (err) return err;
+        var follow_list = data[0]['follows'];
+
+          Model.find({'_id': follow_list},function(err, user){
+                res.render('timeline.ejs', {user: req.session.uid,
+                                    username: req.session.username,
+                                    data: user});
+            });
+        })
+    }
 };
 
 //handle request for user profile
