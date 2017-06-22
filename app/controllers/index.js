@@ -75,7 +75,8 @@ exports.get_post = function(req,res){
 
 //handle create_post
 exports.create_post = function(req,res){
-    if (req.body.text.length>0 &&req.session.uid){
+    if (req.body.text.length>0 &&req.session.uid
+        && req.body.text.length<140){
         console.log(req.body);
         var uid = req.body;
         Model.findByIdAndUpdate(req.session.uid, {$push:{"posts":req.body}},
