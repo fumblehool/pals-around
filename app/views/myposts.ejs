@@ -1,0 +1,28 @@
+<%- include('partials/head') %>
+<body>
+    <div class="container">
+        <%- include('partials/navbar') %>
+        <div class="" style="overflow:hidden;">
+        <h4>Hi! <%= list[0]['username']%></h4>
+        
+    
+    <hr/>
+
+    <% if (list){%>
+        <%for(var i=list[0]['posts'].length-1;i>=0;i--){%>
+            <div class="" style="border: 1px solid #337ab7;width:100%;height:20%;">
+                    <p>You said:</p>
+                    <h4><%=list[0]['posts'][i]['text']%></h4> 
+                    <%=list[0]['posts'][i]['date']%>
+                </div>
+                <hr/>
+        <% } %>
+    <%} else{%>
+            <h4>It seems like you haven't followed anyone yet :(</h4>
+    <% } %>
+        </div>
+</div>
+</div>
+</body>
+
+</html>

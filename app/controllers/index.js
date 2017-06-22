@@ -75,13 +75,24 @@ exports.get_post = function(req,res){
 
 //handle create_post
 exports.create_post = function(req,res){
-    var uid = req.body;
-    Model.findByIdAndUpdate(req.session.uid, {$push:{"posts":req.body}},
+    if (req.body.text.length>0 &&req.session.uid){
+        console.log(req.body);
+        var uid = req.body;
+        Model.findByIdAndUpdate(req.session.uid, {$push:{"posts":req.body}},
         {safe: true, upsert: true},
         function(err, model){
             console.log(model);
             res.redirect("/timeline");
         });
+    }
+    else{
+        if(req.body.text.length == 0){
+            res.redirect("/timeline");
+        }
+        else{
+            res.redirect("/login");
+        }
+    }
 };
 
 //handle get_timeline
@@ -221,3 +232,21 @@ exports.get_pals_list = function(req, res){
         res.redirect("/login");
     }
 };
+
+//handle get user account - show user's posts
+exports.get_user_profile = function(req, res){
+    if(req.session.uid){
+        Model.find({_id: req.session.uid}, function(err, list){
+            if (err) res.send(err);
+            if (!list.length){
+                res.render("myposts", {list: null, user: req.session.uid});
+            }
+            else{
+                res.render("myposts", {list: list, user: req.session.uid});
+            }
+        });
+    }
+    else{
+        res.redirect("/login");
+    }
+}

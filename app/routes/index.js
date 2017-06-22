@@ -48,4 +48,7 @@ module.exports = function(app) {
 
     app.route('/pals')
         .get(Controllers.get_pals_list);
+
+    app.route('/profile')
+        .get(Controllers.get_user_profile)
 };
