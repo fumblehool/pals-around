@@ -25,7 +25,7 @@ exports.create_user = function(req,res){
     }
     else{
         var test = {'username': req.body.username,
-                    'email': req.body.password};
+                    'email': req.body.email};
         Model.find({username: req.body.username}, function(err, user){
             if (err){
                 console.log("user exists");
@@ -46,7 +46,9 @@ exports.create_user = function(req,res){
                     var id = user['_id']
                     console.log(id);
                     req.session.uid = id;
-                    res.render('timeline.ejs', {user: id});
+                    req.session.username = user['username']
+                    res.render('timeline.ejs', {user: id,
+                                                username: req.session.username});
                 })
             }
             
@@ -79,8 +81,7 @@ exports.create_post = function(req,res){
         {safe: true, upsert: true},
         function(err, model){
             console.log(model);
-            res.render("timeline.ejs", {user: req.session.uid,
-                                        username: req.session.username});
+            res.redirect("/timeline");
         });
 };
 
@@ -100,7 +101,7 @@ exports.get_timeline_data = function(req,res){
 };
 
 exports.follow_user = function(req,res){
-    var uid = req.params.uid;
+    var uid = req.body.uid;
     if(req.session.uid){
         Model.findByIdAndUpdate(req.session.uid, {$push: {'follows': uid}},
             {safe: true, upsert: true},
@@ -136,6 +137,7 @@ exports.login_user = function(req, res){
                 req.session.uid = id;
                 req.session.username = user[0]['username']
                 console.log(id);
+                console.log(req.session.username);
                 res.redirect('/timeline');
             }
             else{
@@ -148,8 +150,10 @@ exports.login_user = function(req, res){
 };
 
 exports.logout_user = function(req, res){
+    console.log(req.session.username);
     req.session.destroy(function(){
       console.log("user logged out.")
+      
    });
    res.redirect('/');
 };
@@ -172,10 +176,12 @@ exports.get_login_page = function(req, res){
     }
 };
 
+//handle GET request for signup page template
 exports.get_signup_page = function(req, res){
     res.render('signup.ejs', {user: null, error: null});
 };
 
+//handle request for user timeline
 exports.get_timeline = function(req, res){
     if(!req.session.uid){
         res.redirect("/");
@@ -184,6 +190,25 @@ exports.get_timeline = function(req, res){
                                 username: req.session.username});
 };
 
+//handle request for user profile
 exports.user_profile = function(req, res){
     res.render("profile.ejs", {user: req.session.uid});
+};
+
+//handle get request for pals list
+exports.get_pals_list = function(req, res){
+    if(req.session.uid){
+        Model.find({}, function(err, list){
+            if (err) res.send(err);
+            if (!list.length){
+                res.render("pals", {list: null, user: req.session.uid});
+            }
+            else{
+                res.render("pals", {list: list, user: req.session.uid});
+            }
+        });
+    }
+    else{
+        res.redirect("/login");
+    }
 };

@@ -45,4 +45,7 @@ module.exports = function(app) {
 
     app.route('/user/:uid')
         .get(Controllers.user_profile)
+
+    app.route('/pals')
+        .get(Controllers.get_pals_list);
 };
