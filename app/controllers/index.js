@@ -47,7 +47,7 @@ exports.create_user = function(req,res){
                     console.log(id);
                     req.session.uid = id;
                     req.session.username = user['username']
-                    res.redirect('/timeline.ejs');
+                    res.redirect('/timeline');
                 })
             }
             
@@ -88,7 +88,7 @@ exports.create_post = function(req,res){
     }
 };
 
-//handle get_timeline
+//handle get_data
 exports.get_data = function(req,res){
     if (req.session.uid){
         Model.find({},function(err, user){
@@ -187,7 +187,7 @@ exports.get_signup_page = function(req, res){
 //handle request for user timeline
 exports.get_timeline = function(req, res){
     if(!req.session.uid){
-        res.redirect("/");
+        res.redirect("/login");
     }
     else{
         Model.find({'_id': req.session.uid}, function(err, data){

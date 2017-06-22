@@ -10,7 +10,7 @@
         <% } %>
 
 
-            <% if (list){%>
+            <% if (list.length > array.length){%>
             <% for(var i=0; i < list.length; i++) { %>
                 <% if (list[i]._id == user){%>
                     <h1><% var array = list[i].follows%></h1>
