@@ -26,24 +26,30 @@ exports.create_user = function(req,res){
     else{
         var test = {'username': req.body.username,
                     'email': req.body.password};
-        Model.find(test, function(err, user){
-            if (err) res.send(err);
-            
-            if(!user.length){
+        Model.find({username: req.body.username}, function(err, user){
+            if (err){
+                console.log("user exists");
+                res.render("signup.ejs",{user: null,error:"User exists"});
+            }
+            if(user.length) {
+                console.log("user exists");
+                res.render("signup.ejs",{user: null,error:"User exists"});
+            }
+
+            else{
                 var new_user = new Model(req.body);
                 new_user.save(function(err, user){
                     if (err){
                         res.send(err);
                     }
+                    console.log(user)
                     var id = user['_id']
                     console.log(id);
-                    res.render('home.ejs', {user: id});
+                    req.session.uid = id;
+                    res.render('timeline.ejs', {user: id});
                 })
             }
-            else {
-                console.log("user exists");
-                res.send(user);
-            }
+            
         })
     }   
 };
@@ -62,7 +68,7 @@ exports.get_post = function(req,res){
         //     console.log(posts[i]);
         // }
         // console.log(posts);
-        res.send(posts);
+        res.send(data);
     })
 };
 
@@ -73,20 +79,24 @@ exports.create_post = function(req,res){
         {safe: true, upsert: true},
         function(err, model){
             console.log(model);
-            res.render("timeline", {user: req.session.uid});
+            res.render("timeline.ejs", {user: req.session.uid,
+                                        username: req.session.username});
         });
 };
 
 //handle get_timeline
-exports.get_timeline = function(req,res){
-    if (req.session.uid){
-        Model.find({'_id': req.session.uid},function(err, user){
-            res.json(user);
+exports.get_timeline_data = function(req,res){
+    // if (req.session.uid){
+
+        Model.find({},function(err, user){
+            res.send(user);
+            // res.send("timeline");
         });
-    }
-    else{
-        res.redirect("/");
-    }
+        
+    // }
+    // else{
+    //     res.redirect("/");
+    // }
 };
 
 exports.follow_user = function(req,res){
@@ -121,15 +131,16 @@ exports.login_user = function(req, res){
 
         Model.find(test, function(err, user){
             if(err) res.send(err);
-            if(user){
+            if(user.length){
                 var id = user[0]['_id'];
                 req.session.uid = id;
+                req.session.username = user[0]['username']
                 console.log(id);
                 res.redirect('/timeline');
             }
             else{
                 res.status("400");
-                res.send("user not found.");
+                res.render("login.ejs", {user: null,error:"user not found!"});
             }
 
         });
@@ -147,11 +158,18 @@ exports.home = function(req, res){
     if(req.session.uid){
         res.render('home.ejs', {user: req.session.uid});
     }
-    res.render('home.ejs', {user: null});
+    else{
+        res.render('home.ejs', {user: null});
+    }
 };
 
 exports.get_login_page = function(req, res){
-    res.render('login.ejs', { user: null,error: null,});
+    if(!req.session.uid){
+        res.render('login.ejs', { user: null,error: null,});
+    }
+    else{
+        res.redirect("/");
+    }
 };
 
 exports.get_signup_page = function(req, res){
@@ -162,7 +180,8 @@ exports.get_timeline = function(req, res){
     if(!req.session.uid){
         res.redirect("/");
     }
-    res.render('timeline.ejs', {user: req.session.uid});
+    res.render('timeline.ejs', {user: req.session.uid,
+                                username: req.session.username});
 };
 
 exports.user_profile = function(req, res){
