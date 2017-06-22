@@ -1,7 +1,10 @@
+// models/index.js
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-
+//schema of post
 var Posts = new Schema({
     text:{
         type: String,
@@ -13,6 +16,7 @@ var Posts = new Schema({
     }
 });
 
+//main schema
 var PalsAroundSchema = new Schema({
     name:{
         type: String
@@ -35,6 +39,6 @@ var PalsAroundSchema = new Schema({
     posts: [Posts],
 });
 
-
+//export both schemas
 module.exports = mongoose.model('db', PalsAroundSchema);
 module.exports = mongoose.model('post', Posts);

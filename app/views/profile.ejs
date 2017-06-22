@@ -33,7 +33,10 @@
                     </tbody>
                   </table>
                   <div class="col-md-9 col-lg-9">
-                  <a href="#" class="btn btn-primary text-right">Follow</a>
+                  <form methd="post" action="/api/follow/">
+                  <input type="text" hidden name="uid" value="1234"/>
+                  <button type="submit" class="btn btn-primary text-right">Follow</button>
+                  </form>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,6 @@
+// routes/index.js
 
+//export all the required routes
 module.exports = function(app) {
     var Controllers = require('../controllers');
 
@@ -18,7 +20,7 @@ module.exports = function(app) {
     app.route('/api/timeline')
         .get(Controllers.get_timeline);
 
-    app.route('/api/follow/:uid')
+    app.route('/api/follow/')
         .post(Controllers.follow_user)
         .delete(Controllers.unfollow_user);
 
@@ -43,5 +45,4 @@ module.exports = function(app) {
 
     app.route('/user/:uid')
         .get(Controllers.user_profile)
-
 };
