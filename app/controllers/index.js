@@ -18,7 +18,7 @@ exports.create_user = function(req,res){
        !req.body.password ||
        !req.body.email){
         res.status("400");
-        res.send("Invalid details!");
+        res.render("signup.ejs",{user: null,error:"Invalid details!"});
     }
     else{
         var test = {'username': req.body.username,
@@ -47,9 +47,12 @@ exports.create_user = function(req,res){
 
 exports.get_post = function(req,res){
     var id = req.params.id;
-    Model.find({'posts':{'_id': id}}, function(err, data){
+    Model.find({'posts._id': id}, function(err, data){
         if (err) return err;
-        console.log(data);
+        console.log(data[0].posts);
+        Post.find({'_id': id}, function(err, data){
+            console.log(data);
+        })
         res.send(data);
     })
 };
@@ -64,9 +67,14 @@ exports.create_post = function(req,res){
 };
 
 exports.get_timeline = function(req,res){
-    Model.find({'name': 'Daman'},function(err, user){
-        res.json(user);
-    });
+    if (req.session.uid){
+        Model.find({'_id': req.session.uid},function(err, user){
+            res.json(user);
+        });
+    }
+    else{
+        res.redirect("/");
+    }
 };
 
 exports.follow_user = function(req,res){
@@ -85,7 +93,7 @@ exports.unfollow_user = function(req,res){
 exports.login_user = function(req, res){
     if(!req.body.username || !req.body.password){
         res.status("400");
-        res.render("login.ejs", {error:"Invalid details!"});
+        res.render("login.ejs", {user: null,error:"Invalid details!"});
     }
     else{
         var test = {
@@ -98,7 +106,8 @@ exports.login_user = function(req, res){
             if(user){
                 var id = user[0]['_id'];
                 req.session.uid = id;
-                res.render('timeline.ejs', {user: id});
+                console.log(id);
+                res.redirect('/timeline');
             }
             else{
                 res.status("400");
@@ -117,7 +126,10 @@ exports.logout_user = function(req, res){
 };
 
 exports.home = function(req, res){
-    res.render('home.ejs', {user: ''});
+    if(req.session.uid){
+        res.render('home.ejs', {user: req.session.uid});
+    }
+    res.render('home.ejs', {user: null});
 };
 
 exports.get_login_page = function(req, res){
@@ -125,14 +137,14 @@ exports.get_login_page = function(req, res){
 };
 
 exports.get_signup_page = function(req, res){
-    res.render('signup.ejs', {user: ''});
+    res.render('signup.ejs', {user: null, error: null});
 };
 
 exports.get_timeline = function(req, res){
     if(!req.session.uid){
         res.redirect("/");
     }
-    res.render('timeline.ejs', {user: ''});
+    res.render('timeline.ejs', {user: req.session.uid});
 };
 
 exports.user_profile = function(req, res){
