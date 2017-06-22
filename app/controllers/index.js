@@ -60,18 +60,10 @@ exports.get_post = function(req,res){
     var id = req.params.id;
     Model.find({'posts._id': id}, function(err, data){
         if (err) return err;
-        // console.log(data[0].posts);
-        // var posts = JSON.stringify(data);
-        // var result = [];
-        // for (var i in posts.posts)
-        // {
-        //     console.log("i is" + i);
-        //     console.log(posts[i]);
-        // }
-        // console.log(posts);
         res.send(data);
     })
 };
+
 
 //handle create_post
 exports.create_post = function(req,res){
@@ -97,18 +89,16 @@ exports.create_post = function(req,res){
 };
 
 //handle get_timeline
-exports.get_timeline_data = function(req,res){
-    // if (req.session.uid){
-
+exports.get_data = function(req,res){
+    if (req.session.uid){
         Model.find({},function(err, user){
             res.send(user);
             // res.send("timeline");
         });
-        
-    // }
-    // else{
-    //     res.redirect("/");
-    // }
+    }
+    else{
+        res.redirect("/");
+    }
 };
 
 exports.follow_user = function(req,res){
@@ -178,6 +168,8 @@ exports.home = function(req, res){
     }
 };
 
+
+//handle GET request for login page
 exports.get_login_page = function(req, res){
     if(!req.session.uid){
         res.render('login.ejs', { user: null,error: null,});

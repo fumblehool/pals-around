@@ -17,8 +17,8 @@ module.exports = function(app) {
     app.route('/api/posts')
         .post(Controllers.create_post);
 
-    app.route('/api/timeline')
-        .get(Controllers.get_timeline_data);
+    app.route('/api/database')
+        .get(Controllers.get_data);
 
     app.route('/api/follow/')
         .post(Controllers.follow_user)
