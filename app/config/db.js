@@ -2,5 +2,5 @@
 
 //mongodb url
 module.exports = {
-    url: "mongodb://localhost:27017/palsaround"
+    url: "mongodb://mongo:27017/palsaround"
 }

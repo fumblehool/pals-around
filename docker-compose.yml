@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  mongo:
+    image: mvertes/alpine-mongo:3.4.4-0
+    ports:
+      - "27017:27017"
+
+  pals-around:
+    build: .
+    ports:
+      - "8000:3000"
+
+    links:
+      - mongo
