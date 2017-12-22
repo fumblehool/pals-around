@@ -10,6 +10,8 @@ services:
     build: .
     ports:
       - "8000:3000"
-
+    volumes:
+      - ".:/opt/app/"
+      - "/opt/app/node_modules"
     links:
       - mongo
