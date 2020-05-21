@@ -43,3 +43,12 @@ This social networking webapp which lets user post his status build with Express
     $ node server.js
     ```
 3) Open 'localhost:3000/' in your browser.
+
+
+## Running Locally -:
+
+1) Goto the project directory and run the following command
+	```
+	$ docker-compose up
+	```
+2) Open `localhost:8000/` in your browser.
